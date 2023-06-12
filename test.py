@@ -13,18 +13,21 @@ def resolve_ip_address(domain_name):
 def run_nmap_basic(project_code, ip_address, output_dir):
     print(f"Running basic Nmap scan on {ip_address}...")
     command = f"nmap {ip_address} -oA {output_dir}/{project_code}_nmap_basic"
+    print(f"Command: {command}")
     subprocess.run(command, shell=True)
     print(f"Scan results saved to {output_dir}/{project_code}_nmap_basic files")
 
 def run_nmap_full(project_code, ip_address, output_dir):
     print(f"Running full port scan using Nmap on {ip_address}...")
     command = f"nmap -p- {ip_address} -oA {output_dir}/{project_code}_nmap_full"
+    print(f"Command: {command}")
     subprocess.run(command, shell=True)
     print(f"Scan results saved to {output_dir}/{project_code}_nmap_full files")
 
 def run_dig(project_code, ip_address, output_dir):
     print(f"Running dig command on {ip_address}...")
     command = f"dig {ip_address} > {output_dir}/{project_code}_dig.txt"
+    print(f"Command: {command}")
     subprocess.run(command, shell=True)
     print(f"Dig results saved to {output_dir}/{project_code}_dig.txt")
 
