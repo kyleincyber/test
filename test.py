@@ -3,6 +3,7 @@ import socket
 import os
 
 def resolve_ip_address(domain_name):
+    # Resolve domain name to IP address
     try:
         ip_address = socket.gethostbyname(domain_name)
         return ip_address
@@ -11,24 +12,27 @@ def resolve_ip_address(domain_name):
         return None
 
 def run_nmap_basic(project_code, ip_address, output_dir):
-    print(f"Running basic Nmap scan on {ip_address}...")
+    # Perform basic Nmap scan
+    print(f"\nRunning basic Nmap scan on {ip_address}...")
     command = f"nmap {ip_address} -oA {output_dir}/{project_code}_nmap_basic"
-    print(f"Command: {command}")
-    subprocess.run(command, shell=True)
+    print(f"Command: {command}")  # Print the Nmap command being executed
+    subprocess.run(command, shell=True)  # Execute the Nmap command
     print(f"Scan results saved to {output_dir}/{project_code}_nmap_basic files")
 
 def run_nmap_full(project_code, ip_address, output_dir):
-    print(f"Running full port scan using Nmap on {ip_address}...")
+    # Perform full port scan using Nmap
+    print(f"\nRunning full port scan using Nmap on {ip_address}...")
     command = f"nmap -p- {ip_address} -oA {output_dir}/{project_code}_nmap_full"
-    print(f"Command: {command}")
-    subprocess.run(command, shell=True)
+    print(f"Command: {command}")  # Print the Nmap command being executed
+    subprocess.run(command, shell=True)  # Execute the Nmap command
     print(f"Scan results saved to {output_dir}/{project_code}_nmap_full files")
 
 def run_dig(project_code, ip_address, output_dir):
-    print(f"Running dig command on {ip_address}...")
+    # Run dig command for DNS lookup
+    print(f"\nRunning dig command on {ip_address}...")
     command = f"dig {ip_address} > {output_dir}/{project_code}_dig.txt"
-    print(f"Command: {command}")
-    subprocess.run(command, shell=True)
+    print(f"Command: {command}")  # Print the dig command being executed
+    subprocess.run(command, shell=True)  # Execute the dig command
     print(f"Dig results saved to {output_dir}/{project_code}_dig.txt")
 
 # Main program
@@ -51,6 +55,15 @@ if __name__ == "__main__":
         print(f"Error: File '{file_path}' is empty. Please add IP addresses or domain names.")
         exit(1)
 
+    print("\nSelect which scans to run:")
+    print("1. Basic Nmap Scan")
+    print("2. Full Port Scan")
+    print("3. DNS Lookup")
+    print("4. Run All")
+
+    selected_scans = input("Enter the scan numbers separated by commas (e.g., 1,2): ")
+    selected_scans = selected_scans.split(",")
+
     for target in targets:
         # Resolve domain name to IP address if a domain name is provided
         if not target.replace(".", "").isdigit():
@@ -61,6 +74,12 @@ if __name__ == "__main__":
             ip_address = target
 
         print(f"\nScanning target: {target} ({ip_address})")
-        run_nmap_basic(project_code, ip_address, output_dir)
-        run_nmap_full(project_code, ip_address, output_dir)
-        run_dig(project_code, ip_address, output_dir)
+
+        if '1' in selected_scans or '4' in selected_scans:
+            run_nmap_basic(project_code, ip_address, output_dir)
+
+        if '2' in selected_scans or '4' in selected_scans:
+            run_nmap_full(project_code, ip_address, output_dir)
+
+        if '3' in selected_scans or '4' in selected_scans:
+            run_dig(project_code, ip_address, output_dir)
